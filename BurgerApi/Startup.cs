@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BurgerApi.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using BurgerApi.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace BurgerApi
 {
@@ -37,6 +39,10 @@ namespace BurgerApi
 
             services.AddSingleton<IUserServices, BurgerUserService>();
             services.AddSingleton<IBurgerService, BurgerService>();
+
+            //  Register blog context with dependency injection
+            services.AddDbContext<BurgerContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("BlogContextString")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
