@@ -4,14 +4,16 @@ using BurgerApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BurgerApi.Migrations
 {
     [DbContext(typeof(BurgerContext))]
-    partial class BurgerContextModelSnapshot : ModelSnapshot
+    [Migration("20181102160832_Burger_TimeStamp")]
+    partial class Burger_TimeStamp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

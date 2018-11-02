@@ -4,14 +4,16 @@ using BurgerApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BurgerApi.Migrations
 {
     [DbContext(typeof(BurgerContext))]
-    partial class BurgerContextModelSnapshot : ModelSnapshot
+    [Migration("20181102141045_Burger_InstagramUserId")]
+    partial class Burger_InstagramUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,8 +42,6 @@ namespace BurgerApi.Migrations
                     b.Property<string>("InstagramUserId")
                         .IsRequired()
                         .HasMaxLength(70);
-
-                    b.Property<DateTime>("TimeStamp");
 
                     b.Property<bool>("Verified");
 

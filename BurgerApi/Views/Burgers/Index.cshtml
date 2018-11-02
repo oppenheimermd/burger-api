@@ -13,10 +13,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.InstagramUserId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InstagramSourceUrl)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Verified)
@@ -37,16 +40,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @Html.DisplayFor(modelItem => item.InstagramUserId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.InstagramSourceUrl)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Verified)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Image.FileName)
+                <img src="@item.Image.BurgerPhotoUrl()" style="max-width: 120px;max-height:120px" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Cuisine.CuisineCode)
