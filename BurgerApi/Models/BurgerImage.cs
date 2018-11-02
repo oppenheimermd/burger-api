@@ -29,7 +29,7 @@ namespace BurgerApi.Models
 
         public string BurgerPhotoUrl()
         {
-            return $"/PostMedia/{FileName}";
+            return $"/BurgerImages/{FileName}";
         }
     }
 }

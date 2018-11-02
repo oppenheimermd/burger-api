@@ -16,7 +16,7 @@ namespace BurgerApi.Services
         private readonly BurgerContext _burgerContext;
         private readonly string _folder;
         /// <summary>
-        /// Base directory location for medai
+        /// Base directory location for media
         /// </summary>
         private readonly string _fileLocationPrefix;
 
@@ -132,7 +132,7 @@ namespace BurgerApi.Services
                 await writer.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
             }
 
-            return _fileLocationPrefix + relative;
+            return newFileName + ext;
         }
     }
 }

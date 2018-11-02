@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BurgerApi.Models
@@ -8,17 +9,28 @@ namespace BurgerApi.Models
     /// </summary>
     public class Burger
     {
+        public Burger()
+        {
+            this.TimeStamp = DateTime.UtcNow;
+        }
+
         [Key]
         public int Id { get; set; }
-
-        [Required]
-        [StringLength(50)]
-        public string Title { get; set; }
 
         [StringLength(140)]
         public string Description { get; set; }
 
+        [Required]
+        [StringLength(70)]
+        public string InstagramUserId { get; set; }
+
+        //  format: https://www.instagram.com/p/Bpq3bwzHkag/
+        [Required]
+        public string InstagramSourceUrl { get; set; }
+
         public bool Verified { get; set; } = false;
+
+        public DateTime TimeStamp { get; set; }
 
 
         [Required]

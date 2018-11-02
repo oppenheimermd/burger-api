@@ -38,7 +38,7 @@ namespace BurgerApi
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSingleton<IUserServices, BurgerUserService>();
-            services.AddSingleton<IBurgerService, BurgerService>();
+            services.AddScoped<IBurgerService, BurgerService>();
 
             //  Register blog context with dependency injection
             services.AddDbContext<BurgerContext>(options =>
