@@ -2,61 +2,68 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Create</h2>
+@section DefaultHeader{
+    <ul class="uk-breadcrumb">
+        <li>
+            <a asp-controller="Burgers" asp-action="Index">All</a>
+        </li>
+        <li>
+            <span href="">New burger base</span>
+        </li>
+    </ul>
+}
 
-<h4>Burger</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="InstagramUserId" class="control-label"></label>
-                <input asp-for="InstagramUserId" class="form-control" />
-                <span asp-validation-for="InstagramUserId" class="text-danger"></span>
+<form asp-action="Create" enctype="multipart/form-data">
+    <fieldset class="uk-fieldset">
+        <legend class="uk-legend">Add new burger base</legend>
+        <div asp-validation-summary="ModelOnly" class="uk-form-danger"></div>
+        
+        <div class="uk-margin">
+            <textarea asp-for="Description" class="uk-textarea" rows="5" placeholder="Description"></textarea>
+            <span asp-validation-for="Description" class="uk-form-danger"></span>
+        </div>
+        
+        <div class="uk-margin">
+            <input asp-for="InstagramUserId" class="uk-input" placeholder="Instagram user" />
+            <span asp-validation-for="InstagramUserId" class="uk-form-danger"></span>
+        </div>
+        <div class="uk-margin">
+            <input asp-for="InstagramSourceUrl" class="uk-input" placeholder="Image soure url" />
+            <span asp-validation-for="InstagramSourceUrl" class="uk-form-danger"></span>
+        </div>
+        <div class="uk-margin">
+            <select asp-for="BurgerBaseId" class="uk-select" asp-items="ViewBag.BurgerBase"></select>
+        </div>
+        <div class="uk-margin">
+            <select asp-for="CuisineId" class="uk-select" asp-items="ViewBag.Cuisine"></select>
+        </div>
+
+        <div class="uk-margin">
+            <div uk-form-custom="target: true">
+                <input type="file" name="BurgerImage" id="BurgerImage">
+                <input class="uk-input uk-form-width-medium" type="text" placeholder="Select file" disabled>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="InstagramSourceUrl" class="control-label"></label>
-                <input asp-for="InstagramSourceUrl" class="form-control" />
-                <span asp-validation-for="InstagramSourceUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label" for="InstagramImage">Image</label>
-                <input class="form-control" name="InstagramImage" type="file" placeholder="Instagram photo" />
-            </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="Verified" /> @Html.DisplayNameFor(model => model.Verified)
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="CuisineId" class="control-label"></label>
-                <select asp-for="CuisineId" class="form-control" asp-items="ViewBag.CuisineId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="BurgerBaseId" class="control-label"></label>
-                <select asp-for="BurgerBaseId" class="form-control" asp-items="ViewBag.BurgerBaseId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
+        
+        <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+            <label>
+                <input asp-for="Verified" class="uk-radio" /> @Html.DisplayNameFor(model => model.Verified)
+            </label>
+        </div>
+
+        <div class="uk-margin">
+            <input type="submit" value="Create" class="uk-button uk-button-primary" />
+        </div>
+
+    </fieldset>
+</form>
+
+
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

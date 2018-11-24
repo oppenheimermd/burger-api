@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BurgerApi.Data;
+using BurgerApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -39,6 +40,12 @@ namespace BurgerApi
 
             services.AddSingleton<IUserServices, BurgerUserService>();
             services.AddScoped<IBurgerService, BurgerService>();
+
+            //  This provides you a filled config object instance that has values set from the various
+            //  configuration stores. 
+            var config = new SiteConfig();
+            Configuration.Bind("SiteSettings", config);
+            services.AddSingleton(config);
 
             //  Register blog context with dependency injection
             services.AddDbContext<BurgerContext>(options =>

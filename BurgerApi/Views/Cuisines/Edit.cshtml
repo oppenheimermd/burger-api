@@ -2,38 +2,43 @@
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Edit</h2>
+@section DefaultHeader{
+    <ul class="uk-breadcrumb">
+        <li>
+            <a asp-controller="Cuisines" asp-action="Index">All</a>
+        </li>
+        <li>
+            <span href="">Edit cuisine</span>
+        </li>
+    </ul>
+}
 
-<h4>Cuisine</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="CuisineCode" class="control-label"></label>
-                <input asp-for="CuisineCode" class="form-control" />
-                <span asp-validation-for="CuisineCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CuisineTitle" class="control-label"></label>
-                <input asp-for="CuisineTitle" class="form-control" />
-                <span asp-validation-for="CuisineTitle" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </form>
-    </div>
-</div>
+<form asp-action="Create">
+    <fieldset class="uk-fieldset">
+        <legend class="uk-legend">edit cuisine</legend>
+        <div asp-validation-summary="ModelOnly" class="uk-form-danger"></div>
+
+        <div class="uk-margin">
+            <input asp-for="CuisineCode" class="uk-input" placeholder="Four letter cuisine code"/>
+            <span asp-validation-for="CuisineCode" class="uk-form-danger"></span>
+        </div>
+
+        <div class="uk-margin">
+            <input asp-for="CuisineTitle" class="uk-input" placeholder="Cuisine title"/>
+            <span asp-validation-for="CuisineTitle" class="uk-form-danger"></span>
+        </div>
+            
+        <div class="uk-margin">
+            <input type="submit" value="Update" class="uk-button uk-button-primary" />
+        </div>
+
+    </fieldset>
+</form>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

@@ -17,7 +17,7 @@ namespace BurgerApi.Models
         [Key]
         public int Id { get; set; }
 
-        [StringLength(140)]
+        [StringLength(500)]
         public string Description { get; set; }
 
         [Required]
@@ -30,7 +30,7 @@ namespace BurgerApi.Models
 
         public bool Verified { get; set; } = false;
 
-        public DateTime TimeStamp { get; set; }
+        public DateTime TimeStamp { get; }
 
 
         [Required]

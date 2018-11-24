@@ -2,70 +2,63 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Index</h2>
+@section DefaultHeader{
+    <ul class="uk-breadcrumb">
+        <li>
+            <a asp-controller="Burgers" asp-action="Index">All</a>
+        </li>
+    </ul>
+}
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<table class="uk-table uk-table-divide uk-table-hover">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.InstagramUserId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InstagramSourceUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Verified)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cuisine)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BurgerBase)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InstagramUserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cuisine)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BurgerBase)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Image)
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.InstagramUserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InstagramSourceUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Verified)
-            </td>
-            <td>
-                <img src="@item.Image.BurgerPhotoUrl()" style="max-width: 120px;max-height:120px" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cuisine.CuisineCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BurgerBase.BaseName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InstagramUserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cuisine.CuisineTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BurgerBase.BaseName)
+                </td>
+                <td>
+                    <img src="@item.Image.BurgerPhotoSmallUrl()" />
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

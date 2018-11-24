@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -14,20 +15,22 @@ namespace BurgerApi.Controllers
 {
     public class BurgersController : Controller
     {
-        private readonly BurgerContext _context;
         private readonly IBurgerService _burgerService;
+        private readonly SiteConfig _siteSettings;
 
-        public BurgersController(BurgerContext context, IBurgerService burgerService)
+        private readonly BurgerContext _context;
+
+        public BurgersController(BurgerContext context, IBurgerService burgerService, SiteConfig siteSettings)
         {
             _context = context;
             _burgerService = burgerService;
+            _siteSettings = siteSettings;
         }
 
         // GET: Burgers
         public async Task<IActionResult> Index()
         {
-            var burgerContext = _context.Burgers.Include(b => b.BurgerBase).Include(b => b.Cuisine).Include(b => b.Image);
-            return View(await burgerContext.ToListAsync());
+            return View(await _burgerService.GetBurgersAsync(int.Parse(_siteSettings.ItemsPerPage), 0));
         }
 
         // GET: Burgers/Details/5
@@ -38,11 +41,7 @@ namespace BurgerApi.Controllers
                 return NotFound();
             }
 
-            var burger = await _context.Burgers
-                .Include(b => b.BurgerBase)
-                .Include(b => b.Cuisine)
-                .Include(b => b.Image)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var burger = await _burgerService.GetBurgerAsync(id);
             if (burger == null)
             {
                 return NotFound();
@@ -52,11 +51,13 @@ namespace BurgerApi.Controllers
         }
 
         // GET: Burgers/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["BurgerBaseId"] = new SelectList(_context.BurgerBases, "Id", "BaseName");
-            ViewData["CuisineId"] = new SelectList(_context.Cuisines, "Id", "CuisineCode");
-            ViewData["BurgerImageId"] = new SelectList(_context.Images, "Id", "FileName");
+            var cuisineddList = await _burgerService.GetCuisineDropListAsync();
+            var burgerbaseList = await _burgerService.GetBurgerBaseDropListAsync();
+
+            ViewData["BurgerBase"] = new SelectList(burgerbaseList, "Id", "BaseName");
+            ViewData["Cuisine"] = new SelectList(cuisineddList, "Id", "CuisineTitle");
             return View();
         }
 
@@ -65,60 +66,55 @@ namespace BurgerApi.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Description,Verified,CuisineId,BurgerBaseId,InstagramUserId,InstagramSourceUrl,InstagramImage")] Burger burger, IFormFile InstagramImage)
+        public async Task<IActionResult> Create([Bind("Id,Description,InstagramUserId,InstagramSourceUrl,CuisineId,BurgerBaseId,BurgerImage")] Burger burger)
         {
+            var cuisineddList = await _burgerService.GetCuisineDropListAsync();
+            var burgerbaseList = await _burgerService.GetBurgerBaseDropListAsync();
 
-            //  Do we have photo?
-            //  Check the file length and don't bother attempting to read it if the file contains no content.
-            if (HttpContext.Request.Form.Files.Count != 0)
+            //  Picture required
+            if (HttpContext.Request.Form.Files.Count != 0 )
             {
-                var burgerPhoto = HttpContext.Request.Form.Files[0];
-                //  yes
-                if (burgerPhoto.Length > 0)
+
+                if (ModelState.IsValid)
                 {
-                    var newBurger = new Burger
+                    var burgerPhoto = HttpContext.Request.Form.Files[0];
+                    //  yes
+                    if (burgerPhoto.Length > 0)
                     {
-                        Description = burger.Description,
-                        Verified = burger.Verified,
-                        CuisineId = burger.CuisineId,
-                        BurgerBaseId = burger.BurgerBaseId,
-                        InstagramUserId = burger.InstagramUserId,
-                        InstagramSourceUrl = burger.InstagramSourceUrl
-                    };
+                        var newBurgerPhoto = await _burgerService.SaveBurgerPhotoAsync(burgerPhoto);
+                        await _burgerService.SaveBurgerImage(newBurgerPhoto);
+                        burger.BurgerImageId = newBurgerPhoto.Id;
+                        await _burgerService.SaveBurgerAsync(burger);
+                        
 
-                        var burgerImageName = await _burgerService.SaveBurgerPhotoAsync(burgerPhoto.FileName, burgerPhoto);
-                    // new burgerImage db entry
-                    var burgerImage = new BurgerImage
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
                     {
-                        FileName = burgerImageName,
-                        OriginalFileName = burgerPhoto.FileName,
-                        ImageSourceUrl = burger.InstagramSourceUrl
-
-                    };
-                    await _burgerService.SaveBurgerImageAsync(burgerImage);
-                    newBurger.BurgerImageId = burgerImage.Id;
-                    await _burgerService.SaveBurgerAsync(newBurger);
-                    return RedirectToAction(nameof(Index));
+                        ModelState.AddModelError("", "Image missing");
+                        ViewData["BurgerBase"] = new SelectList(burgerbaseList, "Id", "BaseName");
+                        ViewData["Cuisine"] = new SelectList(cuisineddList, "Id", "CuisineTitle");
+                        return View(burger);
+                    }
 
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Photo required.");
-                    ViewData["BurgerBaseId"] = new SelectList(_context.BurgerBases, "Id", "BaseName", burger.BurgerBaseId);
-                    ViewData["CuisineId"] = new SelectList(_context.Cuisines, "Id", "CuisineCode", burger.CuisineId);
-                    ViewData["BurgerImageId"] = new SelectList(_context.Images, "Id", "FileName", burger.BurgerImageId);
+
+                    ViewData["BurgerBase"] = new SelectList(burgerbaseList, "Id", "BaseName");
+                    ViewData["Cuisine"] = new SelectList(cuisineddList, "Id", "CuisineTitle");
                     return View(burger);
                 }
+
             }
             else
             {
-                ModelState.AddModelError("", "Photo required.");
-                ViewData["BurgerBaseId"] = new SelectList(_context.BurgerBases, "Id", "BaseName", burger.BurgerBaseId);
-                ViewData["CuisineId"] = new SelectList(_context.Cuisines, "Id", "CuisineCode", burger.CuisineId);
-                ViewData["BurgerImageId"] = new SelectList(_context.Images, "Id", "FileName", burger.BurgerImageId);
+                ModelState.AddModelError("", "Image required");
+
+                ViewData["BurgerBase"] = new SelectList(burgerbaseList, "Id", "BaseName");
+                ViewData["Cuisine"] = new SelectList(cuisineddList, "Id", "CuisineTitle");
                 return View(burger);
             }
-
         }
 
         // GET: Burgers/Edit/5
@@ -129,14 +125,17 @@ namespace BurgerApi.Controllers
                 return NotFound();
             }
 
-            var burger = await _context.Burgers.FindAsync(id);
+            var burger = await _burgerService.GetBurgerAsync(id);
             if (burger == null)
             {
                 return NotFound();
             }
-            ViewData["BurgerBaseId"] = new SelectList(_context.BurgerBases, "Id", "BaseName", burger.BurgerBaseId);
-            ViewData["CuisineId"] = new SelectList(_context.Cuisines, "Id", "CuisineCode", burger.CuisineId);
-            ViewData["BurgerImageId"] = new SelectList(_context.Images, "Id", "FileName", burger.BurgerImageId);
+
+            var cuisineddList = await _burgerService.GetCuisineDropListAsync();
+            var burgerbaseList = await _burgerService.GetBurgerBaseDropListAsync();
+
+            ViewData["BurgerBase"] = new SelectList(burgerbaseList, "Id", "BaseName");
+            ViewData["Cuisine"] = new SelectList(cuisineddList, "Id", "CuisineTitle");
             return View(burger);
         }
 
@@ -145,41 +144,24 @@ namespace BurgerApi.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Verified,CuisineId,BurgerBaseId,BurgerImageId")] Burger burger)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,InstagramUserId,InstagramSourceUrl,CuisineId,BurgerBaseId")] Burger burger)
         {
             if (id != burger.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(burger);
+            var editSuccess = await _burgerService.UpdateBurgerAsync(burger);
+            if (editSuccess)
             {
-                try
-                {
-                    _context.Update(burger);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BurgerExists(burger.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BurgerBaseId"] = new SelectList(_context.BurgerBases, "Id", "BaseName", burger.BurgerBaseId);
-            ViewData["CuisineId"] = new SelectList(_context.Cuisines, "Id", "CuisineCode", burger.CuisineId);
-            ViewData["BurgerImageId"] = new SelectList(_context.Images, "Id", "FileName", burger.BurgerImageId);
-            return View(burger);
+            return NotFound();
         }
 
         // GET: Burgers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        /*public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -197,10 +179,10 @@ namespace BurgerApi.Controllers
             }
 
             return View(burger);
-        }
+        }*/
 
         // POST: Burgers/Delete/5
-        [HttpPost, ActionName("Delete")]
+        /*[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -208,11 +190,9 @@ namespace BurgerApi.Controllers
             _context.Burgers.Remove(burger);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
+        }*/
 
-        private bool BurgerExists(int id)
-        {
-            return _context.Burgers.Any(e => e.Id == id);
-        }
+ 
+
     }
 }

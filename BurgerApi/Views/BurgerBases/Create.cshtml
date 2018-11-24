@@ -2,37 +2,44 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Create</h2>
 
-<h4>BurgerBase</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="BaseName" class="control-label"></label>
-                <input asp-for="BaseName" class="form-control" />
-                <span asp-validation-for="BaseName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BaseNameCode" class="control-label"></label>
-                <input asp-for="BaseNameCode" class="form-control" />
-                <span asp-validation-for="BaseNameCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </form>
-    </div>
-</div>
+@section DefaultHeader{
+    <ul class="uk-breadcrumb">
+        <li>
+            <a asp-controller="BurgerBases" asp-action="Index">All</a>
+        </li>
+        <li>
+            <span href="">New burger base</span>
+        </li>
+    </ul>
+}
 
+<form asp-action="Create">
+    <fieldset class="uk-fieldset">
+        <legend class="uk-legend">Add new burger base</legend>
+        <div asp-validation-summary="ModelOnly" class="uk-form-danger"></div>
+
+        <div class="uk-margin">
+            <input asp-for="BaseName" class="uk-input" placeholder="base name"/>
+            <span asp-validation-for="BaseName" class="uk-form-danger"></span>
+        </div>
+
+        <div class="uk-margin">
+            <input asp-for="BaseNameCode" class="uk-input" placeholder="Four letter base code"/>
+            <span asp-validation-for="BaseNameCode" class="uk-form-danger"></span>
+        </div>
+            
+        <div class="uk-margin">
+            <input type="submit" value="Create" class="uk-button uk-button-primary" />
+        </div>
+
+    </fieldset>
+</form>
+        
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

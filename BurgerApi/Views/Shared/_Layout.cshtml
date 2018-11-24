@@ -1,75 +1,221 @@
-﻿<!DOCTYPE html>
+﻿<script type='text/javascript'>
+    //<![CDATA[
+    /*  see: https://www.bloggertipandtrick.net/load-google-fonts-without-render-blocking-css/ */
+    WebFontConfig = {
+        google: {
+            families: ['Open Sans:300,400,700']
+        }
+    };
+
+    (function(d) {
+        var wf = d.createElement('script'),
+            s = d.scripts[0];
+        wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+        wf.async = true;
+        s.parentNode.insertBefore(wf, s);
+    })(document);
+
+//]]>
+</script>
+<!DOCTYPE html>
 @{
     var host = Context.Request.Scheme + "://" + Context.Request.Host;
 }
 <html>
 <head>
     <meta charset="utf-8" />
+    <meta name="description" content="All the best burgers from instagram">
+    <meta name="keywords" content="asp.net core, asp.net core web api, uikit">
+    <meta name="author" content="Michiel Oppenheimer">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BurgerApi</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.18/css/uikit.css" />
+        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" type="text/css" />
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.18/css/uikit.min.css"
+              asp-fallback-test-class="hidden"
+              asp-fallback-test-property="visibility"
+              asp-fallback-test-value="hidden" />
+
+        <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" type="text/css" />
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">BurgerApi</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-            </div>
+    <!-- start: uk-navbar-container -->
+    <div uk-sticky="animation: uk-animation-slide-top" class="uk-navbar-container">
+        <div class="uk-container uk-container-expand">
+            <nav uk-navbar>
+                <!-- start: uk-navbar-left -->
+                <div class="uk-navbar-left">
+                    <a id="sidebar_toggle" class="uk-navbar-toggle" uk-navbar-toggle-icon></a>
+                    <a href="#" class="uk-navbar-item uk-logo">
+                        michieloppenheimer.io - Admin Console
+                    </a>
+                </div>
+                <!-- end: uk-navbar-left -->
+                <!-- start: uk-navbar-right uk-light -->
+                <div class="uk-navbar-right uk-light">
+                    <!-- start: uk-navbar-nav -->
+                    <ul class="uk-navbar-nav">
+                        <li class="uk-active">
+                            <a href="#">Èrik &nbsp;<span class="ion-ios-arrow-down"></span></a>
+                            <div uk-dropdown="pos: bottom-right; mode: click; offset: -17;">
+                                <ul class="uk-nav uk-navbar-dropdown-nav">
+                                    <li class="uk-nav-header">Options</li>
+                                    <li>
+                                        <a href="#">Edit Profile</a>
+                                    </li>
+                                    <li class="uk-nav-header">Actions</li>
+                                    <li><a href="#">Lock</a></li>
+                                    @{
+                                        string path = Context.Request.Path;
+
+                                        if (User.Identity.IsAuthenticated)
+                                        {
+                                            <li><a asp-controller="Blog" asp-action="Edit">New post</a></li>
+                                            <li><a href="~/logout/" title="Sign out as administrator">Sign out</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li><a href="~/login/?returnUrl=@path" rel="nofollow" title="Sign in as administrator">Sign in</a></li>
+                                        }
+                                    }
+
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- end: uk-navbar-nav -->
+                </div>
+                <!-- end: uk-navbar-right uk-light -->
+            </nav>
         </div>
-    </nav>
-
-    <partial name="_CookieConsentPartial" />
-
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - BurgerApi</p>
-        </footer>
     </div>
+    <!-- end: uk-navbar-container -->
+
+
+    <div class="uk-sticky-placeholder"></div>
+
+    <!-- end: tm-sidebar-left uk-background-default -->
+    <div id="sidebar" class="tm-sidebar-left uk-background-default">
+        <!-- start: full-width-center -->
+        <div class="full-width-center">
+            <!-- start: user -->
+            <div class="user">
+                <img id="avatar" width="100" class="uk-border-circle" src="../images/avatar.jpg" />
+                <div class="uk-margin-top"></div>
+                <div id="name" class="uk-text-truncate">Michiel Oppenhimer</div>
+                <div id="email" class="uk-text-truncate">ConsoleTVs@gmail.com</div>
+            </div>
+            <!-- end: user -->
+            <br />
+        </div>
+        <!-- end: full-width-center -->
+        
+
+        <!-- start: uk-nav uk-nav-default -->
+        <ul class="admin-sidebar-links uk-nav uk-nav-default">
+            <li class="uk-nav-header">
+                Reports
+            </li>
+            <li>@Html.ActionLink("New Post", "CreatePost", "Console")</li>
+            <li>@Html.ActionLink("Posts", "Index", "Console")</li>
+            <li>@Html.ActionLink("Unpublished Comments", "CommentsUnpublished", "Console")</li>
+            <li>@Html.ActionLink("Add Equipment", "EditEquipment", "Console")</li>
+            <li>@Html.ActionLink("All Equipment", "EquipmentIndex", "Console")</li>
+            <li><a href="tables.html">Tables</a></li>
+
+            <li class="uk-nav-header">
+                Pages
+            </li>
+            <li>
+                <a href="account/logintest">Login</a>
+            </li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="404.html">404</a></li>
+        </ul>
+        <!-- end: uk-nav uk-nav-default -->
+    </div>
+    <!-- end: tm-sidebar-left uk-background-default -->
+
+
+    <!-- end: content-padder content-background -->
+    <div class="content-padder content-background">
+
+        <!-- end: uk-section-small uk-section-default -->
+        <div class="uk-section-small uk-section-default header add-btm-shadow">
+            <!-- end: uk-container uk-container-large -->
+            <div class="uk-container uk-container-large">
+                @RenderSection("header", required: true)
+            </div>
+            <!-- end: uk-container uk-container-large -->
+        </div>
+        <!-- end: uk-section-small uk-section-default -->
+        
+
+        <!-- end: uk-section -->
+        <div class="uk-section">
+            @RenderBody()
+        </div>
+        <!-- end: uk-section -->
+
+    </div>
+    <!-- end: content-padder content-background -->
+
+
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"
+                crossorigin="anonymous"
+                integrity="sha384-bPV3mA2eo3edoq56VzcPBmG1N1QVUfjYMxVIJPPzyFJyFZ8GFfN7Npt06Zr23qts">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"
+                crossorigin="anonymous"
+                integrity="sha384-ZoaMbDF+4LeFxg6WdScQ9nnR1QC2MIRxA1O9KWEXQwns1G8UNyIEZIQidzb0T1fo">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.18/js/uikit.min.js"
+                crossorigin="anonymous"
+                integrity="sha384-K7vfPERRANb9CQ6gG4gekl/q83Juz54u1ThJvwImj/0er+7zw1tAqA7Jb5rMGFGn">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.18/js/uikit-icons.min.js"
+                crossorigin="anonymous"
+                integrity="sha384-JmBdFw+mv5pInapj3hI6ibda4ygKvC3Qo7ZyFIdMtsjjUkucyGKvFSouMiMI52KS">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.transit/0.9.12/jquery.transit.min.js"
+                crossorigin="anonymous"
+                integrity="sha384-Yt0SloQYggT/O72oHzbQvYgyJ8k+ja4adGsAlj9oIvpN45zNB7/dMcUM+0dSieaY">
+        </script>
+
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"
                 crossorigin="anonymous"
-                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+                integrity="sha384-bPV3mA2eo3edoq56VzcPBmG1N1QVUfjYMxVIJPPzyFJyFZ8GFfN7Npt06Zr23qts">
         </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"
                 crossorigin="anonymous"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+                integrity="sha384-ZoaMbDF+4LeFxg6WdScQ9nnR1QC2MIRxA1O9KWEXQwns1G8UNyIEZIQidzb0T1fo">
         </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.18/js/uikit.min.js"
+                crossorigin="anonymous"
+                integrity="sha384-K7vfPERRANb9CQ6gG4gekl/q83Juz54u1ThJvwImj/0er+7zw1tAqA7Jb5rMGFGn">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.18/js/uikit-icons.min.js"
+                crossorigin="anonymous"
+                integrity="sha384-JmBdFw+mv5pInapj3hI6ibda4ygKvC3Qo7ZyFIdMtsjjUkucyGKvFSouMiMI52KS">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.transit/0.9.12/jquery.transit.min.js"
+                crossorigin="anonymous"
+                integrity="sha384-Yt0SloQYggT/O72oHzbQvYgyJ8k+ja4adGsAlj9oIvpN45zNB7/dMcUM+0dSieaY">
+        </script>
+
+        <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
 
     @RenderSection("Scripts", required: false)

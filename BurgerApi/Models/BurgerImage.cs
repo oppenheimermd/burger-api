@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BurgerApi.Models
 {
@@ -17,19 +18,31 @@ namespace BurgerApi.Models
         public int Id { get; set; }
 
         [Required]
-        public string FileName { get; set; }
+        public string FileNameLarge { get; set; }
 
         [Required]
-        public string OriginalFileName { get; set; }
+        public string FileNameMedium { get; set; }
 
         [Required]
-        public string ImageSourceUrl { get; set; }
+        public string FileNameSmall { get; set; }
 
-        public DateTime TimeStamp { get; set; }
 
-        public string BurgerPhotoUrl()
+        public DateTime TimeStamp { get; }
+
+
+        public string BurgerPhotoSmallUrl()
         {
-            return $"/BurgerImages/{FileName}";
+            return $"/BurgerImages/{FileNameSmall}";
         }
+        public string BurgerPhotoMediumUrl()
+        {
+            return $"/BurgerImages/{FileNameMedium}";
+        }
+
+        public string BurgerPhotoLargeUrl()
+        {
+            return $"/BurgerImages/{FileNameLarge}";
+        }
+
     }
 }
