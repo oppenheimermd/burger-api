@@ -3,14 +3,16 @@ using BurgerApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BurgerApi.Migrations
 {
     [DbContext(typeof(BurgerContext))]
-    partial class BurgerContextModelSnapshot : ModelSnapshot
+    [Migration("20181121171612_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,7 +33,7 @@ namespace BurgerApi.Migrations
                     b.Property<int>("CuisineId");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(500);
+                        .HasMaxLength(140);
 
                     b.Property<string>("InstagramSourceUrl")
                         .IsRequired();
@@ -84,6 +86,9 @@ namespace BurgerApi.Migrations
                         .IsRequired();
 
                     b.Property<string>("FileNameSmall")
+                        .IsRequired();
+
+                    b.Property<string>("ImageSourceUrl")
                         .IsRequired();
 
                     b.HasKey("Id");

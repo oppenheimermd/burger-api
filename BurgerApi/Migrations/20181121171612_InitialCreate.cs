@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BurgerApi.Migrations
@@ -28,10 +27,10 @@ namespace BurgerApi.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    FileName = table.Column<string>(nullable: false),
-                    OriginalFileName = table.Column<string>(nullable: false),
-                    ImageSourceUrl = table.Column<string>(nullable: false),
-                    TimeStamp = table.Column<DateTime>(nullable: false)
+                    FileNameLarge = table.Column<string>(nullable: false),
+                    FileNameMedium = table.Column<string>(nullable: false),
+                    FileNameSmall = table.Column<string>(nullable: false),
+                    ImageSourceUrl = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,8 +57,9 @@ namespace BurgerApi.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(maxLength: 50, nullable: false),
                     Description = table.Column<string>(maxLength: 140, nullable: true),
+                    InstagramUserId = table.Column<string>(maxLength: 70, nullable: false),
+                    InstagramSourceUrl = table.Column<string>(nullable: false),
                     Verified = table.Column<bool>(nullable: false),
                     CuisineId = table.Column<int>(nullable: false),
                     BurgerBaseId = table.Column<int>(nullable: false),

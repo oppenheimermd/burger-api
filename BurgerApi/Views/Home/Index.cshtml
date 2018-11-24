@@ -1,6 +1,41 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@section header
+    {
+    <h1>
+        <span uk-icon="heart"></span> Overview
+    </h1>
+
+    <ul class="uk-breadcrumb">
+        <li>@Html.ActionLink("Home", "Index")</li>
+        <li>
+            <span> This Page</span>
+        </li>
+    </ul>
+}
+
+    <!-- start: section-small -->
+    <div class="section-small">
+        <!-- start: uk-container uk-container-large -->
+        <div class="uk-container uk-container-large">
+            <!-- start: uk-grid-margin uk-grid-stack -->
+            <div class="uk-grid-margin uk-grid-stack" uk-grid>
+                <!-- end: uk-width-1-1@m -->
+                <div class="uk-width-1-1@m">
+                    <h2 class="uk-text-center" uk-scrollspy="cls:uk-animation-fade">
+                        All the best burger photo uploads from Instagram in one handy api.
+                    </h2>
+                </div>
+                <!-- start: uk-width-1-1@m -->
+            </div>
+            <!-- start: uk-grid-marginuk-grid-stack -->
+        </div>
+        <!-- end: uk-container uk-container-large -->
+    </div>
+    <!-- end: section-small -->
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
     <ol class="carousel-indicators">

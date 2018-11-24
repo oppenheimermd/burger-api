@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using BurgerApi.Data;
 using BurgerApi.Models;
+using BurgerApi.Services;
 
 namespace BurgerApi.Controllers
 {
     public class CuisinesController : Controller
     {
-        private readonly BurgerContext _context;
+        private readonly IBurgerService _burgerService;
 
-        public CuisinesController(BurgerContext context)
+        public CuisinesController(IBurgerService burgerService)
         {
-            _context = context;
+            _burgerService = burgerService;
         }
 
         // GET: Cuisines
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Cuisines.ToListAsync());
+            return View(await _burgerService.GetCuisineAsync(12, 0));
         }
 
         // GET: Cuisines/Details/5
@@ -33,8 +28,8 @@ namespace BurgerApi.Controllers
                 return NotFound();
             }
 
-            var cuisine = await _context.Cuisines
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var cuisine = await _burgerService.GetCuisineAsync(id);
+
             if (cuisine == null)
             {
                 return NotFound();
@@ -58,8 +53,7 @@ namespace BurgerApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cuisine);
-                await _context.SaveChangesAsync();
+                await _burgerService.SaveCuisineAsync(cuisine);
                 return RedirectToAction(nameof(Index));
             }
             return View(cuisine);
@@ -73,7 +67,7 @@ namespace BurgerApi.Controllers
                 return NotFound();
             }
 
-            var cuisine = await _context.Cuisines.FindAsync(id);
+            var cuisine = await _burgerService.GetCuisineAsync(id);
             if (cuisine == null)
             {
                 return NotFound();
@@ -93,31 +87,18 @@ namespace BurgerApi.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(cuisine);
+            var editSuccess = await _burgerService.UpdateCuisineAsync(cuisine);
+            if (editSuccess)
             {
-                try
-                {
-                    _context.Update(cuisine);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CuisineExists(cuisine.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
                 return RedirectToAction(nameof(Index));
             }
-            return View(cuisine);
+
+            return NotFound();
         }
 
         // GET: Cuisines/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        /*public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -132,10 +113,10 @@ namespace BurgerApi.Controllers
             }
 
             return View(cuisine);
-        }
+        }*/
 
         // POST: Cuisines/Delete/5
-        [HttpPost, ActionName("Delete")]
+        /*[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -143,11 +124,7 @@ namespace BurgerApi.Controllers
             _context.Cuisines.Remove(cuisine);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
+        }*/
 
-        private bool CuisineExists(int id)
-        {
-            return _context.Cuisines.Any(e => e.Id == id);
-        }
     }
 }

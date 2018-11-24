@@ -2,9 +2,19 @@
 
 @{
     ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Details</h2>
+@section DefaultHeader{
+    <ul class="uk-breadcrumb">
+        <li>
+            <a asp-controller="Cuisines" asp-action="Index">All</a>
+        </li>
+        <li>
+            <span href="">Details</span>
+        </li>
+    </ul>
+}
 
 <div>
     <h4>Cuisine</h4>

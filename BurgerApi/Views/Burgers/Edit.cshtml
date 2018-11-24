@@ -2,65 +2,61 @@
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Edit</h2>
+@section DefaultHeader{
+    <ul class="uk-breadcrumb">
+        <li>
+            <a asp-controller="Burgers" asp-action="Index">All</a>
+        </li>
+        <li>
+            <span href="">Edit burger</span>
+        </li>
+    </ul>
+}
 
-<h4>Burger</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <form asp-action="Edit">
+        <fieldset class="uk-fieldset">
+            <legend class="uk-legend">Edit burger</legend>
+            <div asp-validation-summary="ModelOnly" class="uk-form-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="InstagramUserId" class="control-label"></label>
-                <input asp-for="InstagramUserId" class="form-control" />
-                <span asp-validation-for="InstagramUserId" class="text-danger"></span>
+
+            <div class="uk-margin">
+                <input asp-for="InstagramUserId" class="uk-input" placeholder="instagram user id" />
+                <span asp-validation-for="InstagramUserId" class="uk-form-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+            <div class="uk-margin">
+                <input asp-for="InstagramSourceUrl" class="uk-input" placeholder="post url" />
+                <span asp-validation-for="InstagramSourceUrl" class="uk-form-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="InstagramSourceUrl" class="control-label"></label>
-                <input asp-for="InstagramSourceUrl" class="form-control" />
-                <span asp-validation-for="InstagramSourceUrl" class="text-danger"></span>
+            
+            <div class="uk-margin">
+                <textarea asp-for="Description" class="uk-textarea" rows="5" placeholder="Description"></textarea>
             </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="Verified" /> @Html.DisplayNameFor(model => model.Verified)
-                    </label>
-                </div>
+
+            <div class="uk-margin">
+                <select asp-for="BurgerBaseId" class="uk-select" asp-items="ViewBag.BurgerBase"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="CuisineId" class="control-label"></label>
-                <select asp-for="CuisineId" class="form-control" asp-items="ViewBag.CuisineId"></select>
-                <span asp-validation-for="CuisineId" class="text-danger"></span>
+            <div class="uk-margin">
+                <select asp-for="CuisineId" class="uk-select" asp-items="ViewBag.Cuisine"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="BurgerBaseId" class="control-label"></label>
-                <select asp-for="BurgerBaseId" class="form-control" asp-items="ViewBag.BurgerBaseId"></select>
-                <span asp-validation-for="BurgerBaseId" class="text-danger"></span>
+            
+            <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                <label>
+                    <input asp-for="Verified" class="uk-radio" /> @Html.DisplayNameFor(model => model.Verified)
+                </label>
             </div>
-            <div class="form-group">
-                <label asp-for="BurgerImageId" class="control-label"></label>
-                <select asp-for="BurgerImageId" class="form-control" asp-items="ViewBag.BurgerImageId"></select>
-                <span asp-validation-for="BurgerImageId" class="text-danger"></span>
+
+            <div class="uk-margin">
+                <input type="submit" value="Update" class="uk-button uk-button-primary" />
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </form>
-    </div>
-</div>
+
+        </fieldset>
+    </form>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

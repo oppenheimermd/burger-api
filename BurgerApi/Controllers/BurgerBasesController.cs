@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using BurgerApi.Data;
 using BurgerApi.Models;
+using BurgerApi.Services;
 
 namespace BurgerApi.Controllers
 {
     public class BurgerBasesController : Controller
     {
-        private readonly BurgerContext _context;
+        private readonly IBurgerService _burgerService;
+        private readonly SiteConfig _siteSettings;
 
-        public BurgerBasesController(BurgerContext context)
+        public BurgerBasesController(IBurgerService burgerService, SiteConfig siteSettings)
         {
-            _context = context;
+            _burgerService = burgerService;
+            _siteSettings = siteSettings;
         }
 
         // GET: BurgerBases
         public async Task<IActionResult> Index()
         {
-            return View(await _context.BurgerBases.ToListAsync());
+            return View(await _burgerService.GetBurgersBaseAsync(int.Parse(_siteSettings.ItemsPerPage),0));
         }
 
         // GET: BurgerBases/Details/5
@@ -33,8 +30,7 @@ namespace BurgerApi.Controllers
                 return NotFound();
             }
 
-            var burgerBase = await _context.BurgerBases
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var burgerBase = await _burgerService.GetBurgerBaseAsync(id);
             if (burgerBase == null)
             {
                 return NotFound();
@@ -58,8 +54,7 @@ namespace BurgerApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(burgerBase);
-                await _context.SaveChangesAsync();
+                await _burgerService.SaveBurgerBaseAsync(burgerBase);
                 return RedirectToAction(nameof(Index));
             }
             return View(burgerBase);
@@ -73,7 +68,7 @@ namespace BurgerApi.Controllers
                 return NotFound();
             }
 
-            var burgerBase = await _context.BurgerBases.FindAsync(id);
+            var burgerBase = await _burgerService.GetBurgerBaseAsync(id);
             if (burgerBase == null)
             {
                 return NotFound();
@@ -93,31 +88,17 @@ namespace BurgerApi.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(burgerBase);
+            var editSuccess = await _burgerService.UpdateBurgerBaseAsync(burgerBase);
+            if (editSuccess)
             {
-                try
-                {
-                    _context.Update(burgerBase);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BurgerBaseExists(burgerBase.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
                 return RedirectToAction(nameof(Index));
             }
-            return View(burgerBase);
+            return NotFound();
         }
 
         // GET: BurgerBases/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        /*public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -143,11 +124,7 @@ namespace BurgerApi.Controllers
             _context.BurgerBases.Remove(burgerBase);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
+        }*/
 
-        private bool BurgerBaseExists(int id)
-        {
-            return _context.BurgerBases.Any(e => e.Id == id);
-        }
     }
 }

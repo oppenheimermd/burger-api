@@ -2,37 +2,43 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Create</h2>
+@section DefaultHeader{
+    <ul class="uk-breadcrumb">
+        <li>
+            <a asp-controller="Cuisines" asp-action="Index">All</a>
+        </li>
+        <li>
+            <span href="">New cuisine</span>
+        </li>
+    </ul>
+}
 
-<h4>Cuisine</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CuisineCode" class="control-label"></label>
-                <input asp-for="CuisineCode" class="form-control" />
-                <span asp-validation-for="CuisineCode" class="text-danger"></span>
+    <form asp-action="Create">
+        <fieldset class="uk-fieldset">
+            <legend class="uk-legend">Add new cuisine</legend>
+            <div asp-validation-summary="ModelOnly" class="uk-form-danger"></div>
+
+            <div class="uk-margin">
+                <input asp-for="CuisineCode" class="uk-input" placeholder="Four letter cuisine code"/>
+                <span asp-validation-for="CuisineCode" class="uk-form-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CuisineTitle" class="control-label"></label>
-                <input asp-for="CuisineTitle" class="form-control" />
-                <span asp-validation-for="CuisineTitle" class="text-danger"></span>
+
+            <div class="uk-margin">
+                <input asp-for="CuisineTitle" class="uk-input" placeholder="Cuisine title"/>
+                <span asp-validation-for="CuisineTitle" class="uk-form-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+            
+            <div class="uk-margin">
+                <input type="submit" value="Create" class="uk-button uk-button-primary" />
             </div>
-        </form>
+
+        </fieldset>
+    </form>
+        
+    <div>
+        <a asp-action="Index">Back to List</a>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

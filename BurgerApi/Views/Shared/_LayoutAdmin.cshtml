@@ -1,0 +1,196 @@
+﻿<script type='text/javascript'>
+    //<![CDATA[
+    /*  see: https://www.bloggertipandtrick.net/load-google-fonts-without-render-blocking-css/ */
+    WebFontConfig = {
+        google: {
+            families: ['Open Sans:300,400,700']
+        }
+    };
+
+    (function(d) {
+        var wf = d.createElement('script'),
+            s = d.scripts[0];
+        wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+        wf.async = true;
+        s.parentNode.insertBefore(wf, s);
+    })(document);
+
+//]]>
+</script>
+
+<!DOCTYPE html>
+
+<html lang="en-gb" dir="ltr" vocab="http://schema.org/">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Burger API Admin Console</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="/lib/uikit-3.0.0-rc.23/css/uikit.css" />
+        <link href="/css/site.css" rel="stylesheet" asp-append-version="true" type="text/css" />
+        <link rel="stylesheet" href="~/css/AdminStyles.css" asp-append-version="true" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/uikit-3.0.0-rc.23/css/uikit.min.css"
+              asp-fallback-href="~/lib/uikit-3.0.0-rc.23/css/uikit.min.css"
+              asp-fallback-test-class="hidden"
+              asp-fallback-test-property="visibility"
+              asp-fallback-test-value="hidden" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/AdminStyles.css" asp-append-version="true" />
+    </environment>
+</head>
+<body>
+    <!-- start: uk-navbar-container tm-navbar-container uk-active -->
+    <div uk-sticky class="uk-navbar-container uk-active">
+        <!-- start: uk-container uk-container-expand -->
+        <div class="uk-container uk-container-expand">
+            <!-- start: uk-navbar -->
+            <nav uk-navbar>
+                <!-- start: uk-navbar-left -->
+                <div class="uk-navbar-left">
+                    <a id="sidebar_toggle" class="uk-navbar-toggle" uk-navbar-toggle-icon="">
+                    </a>
+                    <a href="#" class="uk-navbar-item uk-logo">
+                        UI Admin
+                    </a>
+                </div>
+                <!-- end: uk-navbar-left -->
+                
+
+                <!-- start: uk-navbar-right uk-light -->
+                <div class="uk-navbar-right uk-light">
+                    <ul class="uk-navbar-nav">
+                        <li class="uk-active">
+                            <a href="#">Èrik &nbsp;<span class="ion-ios-arrow-down"></span></a>
+                            <div uk-dropdown="pos: bottom-right; mode: click; offset: -17;" class="uk-dropdown">
+                                <ul class="uk-nav uk-navbar-dropdown-nav">
+                                    <li class="uk-nav-header">Options</li>
+                                    <li><a href="#">Edit Profile</a></li>
+                                    <li class="uk-nav-header">Actions</li>
+                                    <li><a href="#">Lock</a></li>
+                                    <li><a href="#">Logout</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- end: uk-navbar-right uk-light -->
+                
+
+            </nav>
+            <!-- end: uk-navbar -->
+        </div>
+        <!-- end: uk-container uk-container-expand -->
+    </div>
+<!-- end: uk-navbar-container tm-navbar-container uk-active -->
+
+
+<!-- start: sidebar -->
+    <div id="sidebar" class="tm-sidebar-left uk-background-default">
+        <!-- start: center-content -->
+        <div class="center-content">
+            <div class="user">
+                <img id="avatar" width="100" class="uk-border-circle" src="images/avatar.jpg" />
+                <div class="uk-margin-top"></div>
+                <div id="name" class="uk-text-truncate">Èrik Campobadal</div>
+                <div id="email" class="uk-text-truncate">ConsoleTVs@gmail.com</div>
+                <span id="status" data-enabled="true" data-online-text="Online" data-away-text="Away" data-interval="10000" class="uk-margin-top uk-label uk-label-success"></span>
+            </div>
+            <br />
+        </div>
+        <!-- end: center-content -->
+        
+
+        <!-- end: uk-nav uk-nav-default -->
+        <ul class="uk-nav uk-nav-default">
+            <li class="uk-nav-header">
+                Burgers
+            </li>
+            <li><a asp-controller="Burgers" asp-action="Create">New</a></li>
+            <li><a asp-controller="Burgers" asp-action="Index">All</a></li>
+            <li class="uk-nav-header">
+                Cuisine
+            </li>
+            <li><a asp-controller="Cuisines" asp-action="Create">New</a></li>
+            <li><a asp-controller="Cuisines" asp-action="Index">All</a></li>
+            <li class="uk-nav-header">
+                Burger Base
+            </li>
+            <li><a asp-controller="BurgerBases" asp-action="Create">New</a></li>
+            <li><a asp-controller="BurgerBases" asp-action="Index">All</a></li>
+
+        </ul>
+        <!-- end: uk-nav uk-nav-default -->
+    </div>
+<!-- end: sidebar -->
+
+
+<!-- end: content-padder content-background -->
+    <div class="content-padder content-background">
+        <!-- start: uk-section-small uk-section-default header -->
+        <div class="uk-section-small uk-section-default header">
+            <!-- start: uk-container uk-container-large -->
+            <div class="uk-container uk-container-large">
+                @RenderSection("DefaultHeader", true)
+            </div>
+            <!-- end: uk-container uk-container-large -->
+        </div>
+        <!-- end: uk-section-small uk-section-default header -->
+        
+
+        <!-- start: uk-section-small -->
+        <div class="uk-section-small">
+            <!-- start: uk-container uk-container-large -->
+            <div class="uk-container uk-container-large">
+                @RenderBody()
+            </div>
+            <!-- end: uk-container uk-container-large -->
+        </div>
+        <!-- end: uk-section-small -->
+        
+        
+
+    </div>
+    <!-- end: content-padder content-background -->
+
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/lib/uikit-3.0.0-rc.23/js/uikit.js" asp-append-version="true"></script>
+        <script src="~/lib/uikit-3.0.0-rc.23/js/uikit-icons.min.js" asp-append-version="true"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.transit/0.9.12/jquery.transit.min.js" integrity="sha256-rqEXy4JTnKZom8mLVQpvni3QHbynfjPmPxQVsPZgmJY=" crossorigin="anonymous"></script>
+        <script src="~/js/admin.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment exclude="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.23/js/uikit.min.js"
+                asp-fallback-src="~/lib/uikit-3.0.0-rc.23/js/uikit.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-tUE1Rx1+VVmyonEGjovtJHxnHpajQhu/bEWvUWZwWxkSSIPSFkCVHfjbZO5A5dAl">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.23/js/uikit-icons.min.js"
+                asp-fallback-src="~/lib/uikit-3.0.0-rc.23/js/uikit-icons.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-rykS0p0esz/OpEnM+QEcTnvBd+gcAUcRXloTdutcuIWBhaNvc5npuobC33qQvYW0">
+        </script>
+
+
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.transit/0.9.12/jquery.transit.min.js" integrity="sha256-rqEXy4JTnKZom8mLVQpvni3QHbynfjPmPxQVsPZgmJY=" crossorigin="anonymous"></script>
+        <script src="~/js/admin.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
