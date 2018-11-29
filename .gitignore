@@ -332,3 +332,5 @@ ASALocalRun/
 
 # BurgerImages folder
 burgerImages/
+# External JS Libraries
+lib

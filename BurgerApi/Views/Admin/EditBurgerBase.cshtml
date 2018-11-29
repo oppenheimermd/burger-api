@@ -1,45 +1,46 @@
 ﻿@model BurgerApi.Models.BurgerBase
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit Burger Base";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
-
 
 @section DefaultHeader{
     <ul class="uk-breadcrumb">
         <li>
-            <a asp-controller="BurgerBases" asp-action="Index">All</a>
+            <a asp-controller="Admin" asp-action="BurgerBaseAll">All</a>
         </li>
         <li>
-            <span href="">New burger base</span>
+            <span href="">Edit burger base</span>
         </li>
     </ul>
 }
 
-<form asp-action="Create">
+<form asp-action="EditBurgerBase">
     <fieldset class="uk-fieldset">
-        <legend class="uk-legend">Add new burger base</legend>
+        <legend class="uk-legend">Edit burger base</legend>
         <div asp-validation-summary="ModelOnly" class="uk-form-danger"></div>
+        <input type="hidden" asp-for="Id" />
 
         <div class="uk-margin">
-            <input asp-for="BaseName" class="uk-input" placeholder="base name"/>
+            <input asp-for="BaseName" class="uk-input" placeholder="base name" />
             <span asp-validation-for="BaseName" class="uk-form-danger"></span>
         </div>
 
         <div class="uk-margin">
-            <input asp-for="BaseNameCode" class="uk-input" placeholder="Four letter base code"/>
+            <input asp-for="BaseNameCode" class="uk-input" placeholder="Four letter base code" />
             <span asp-validation-for="BaseNameCode" class="uk-form-danger"></span>
         </div>
-            
+
         <div class="uk-margin">
-            <input type="submit" value="Create" class="uk-button uk-button-primary" />
+            <input type="submit" value="Update" class="uk-button uk-button-primary" />
         </div>
 
     </fieldset>
 </form>
-        
+
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Admin" asp-action="BurgerBaseAll">Back to List</a>
 </div>
+
 

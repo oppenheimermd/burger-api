@@ -1,31 +1,31 @@
 ﻿@model BurgerApi.Models.Burger
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create new burger";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 @section DefaultHeader{
     <ul class="uk-breadcrumb">
         <li>
-            <a asp-controller="Burgers" asp-action="Index">All</a>
+            <a asp-controller="Admin" asp-action="Index">All</a>
         </li>
         <li>
-            <span href="">New burger base</span>
+            <span href="">New burger</span>
         </li>
     </ul>
 }
 
-<form asp-action="Create" enctype="multipart/form-data">
+<form asp-action="CreateBurger" enctype="multipart/form-data">
     <fieldset class="uk-fieldset">
-        <legend class="uk-legend">Add new burger base</legend>
+        <legend class="uk-legend">Add new burger</legend>
         <div asp-validation-summary="ModelOnly" class="uk-form-danger"></div>
-        
+
         <div class="uk-margin">
             <textarea asp-for="Description" class="uk-textarea" rows="5" placeholder="Description"></textarea>
             <span asp-validation-for="Description" class="uk-form-danger"></span>
         </div>
-        
+
         <div class="uk-margin">
             <input asp-for="InstagramUserId" class="uk-input" placeholder="Instagram user" />
             <span asp-validation-for="InstagramUserId" class="uk-form-danger"></span>
@@ -47,7 +47,7 @@
                 <input class="uk-input uk-form-width-medium" type="text" placeholder="Select file" disabled>
             </div>
         </div>
-        
+
         <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
             <label>
                 <input asp-for="Verified" class="uk-radio" /> @Html.DisplayNameFor(model => model.Verified)
@@ -64,6 +64,7 @@
 
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" asp-controller="Admin">Back to List</a>
 </div>
+
 

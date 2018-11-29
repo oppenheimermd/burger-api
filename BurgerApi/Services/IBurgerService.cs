@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BurgerApi.Models;
+using BurgerApi.Models.Helpers;
 using Microsoft.AspNetCore.Http;
 
 namespace BurgerApi.Services
@@ -46,6 +48,14 @@ namespace BurgerApi.Services
         /// <param name="skip"></param>
         /// <returns></returns>
         Task<IEnumerable<Burger>> GetBurgersAsync(int count, int skip = 0);
+
+        /// <summary>
+        /// Get all <see cref="Burger"/>'s. This query is pageable
+        /// </summary>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        PagedResult<Burger> GetBurgersPageable(int? page);
+
 
         /// <summary>
         /// Get an instance of a <see cref="Burger"/>
@@ -111,6 +121,13 @@ namespace BurgerApi.Services
         /// </summary>
         /// <returns></returns>
         Task<List<BurgerBase>> GetBurgerBaseDropListAsync();
+
+        /// <summary>
+        /// Check if <see cref="Burger"/> entity has already been added
+        /// </summary>
+        /// <param name="instagramUrl"></param>
+        /// <returns></returns>
+        Task<bool> BurgerExistAsync(string instagramUrl);
 
         /// <summary>
         /// Update a <see cref="Burger"/> instance

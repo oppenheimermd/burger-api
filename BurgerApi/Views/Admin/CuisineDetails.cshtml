@@ -1,14 +1,14 @@
 ﻿@model BurgerApi.Models.Cuisine
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Cuisine Details";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 @section DefaultHeader{
     <ul class="uk-breadcrumb">
         <li>
-            <a asp-controller="Cuisines" asp-action="Index">All</a>
+            <a asp-controller="Admin" asp-action="CuisinesAll">All</a>
         </li>
         <li>
             <span href="">Details</span>
@@ -35,6 +35,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Admin" asp-action="EditCuisine" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-controller="Admin" asp-action="Index">Back to List</a>
 </div>
