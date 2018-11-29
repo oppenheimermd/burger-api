@@ -1,0 +1,45 @@
+﻿@model BurgerApi.Models.BurgerBase
+
+@{
+    ViewData["Title"] = "Create burger base";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+@section DefaultHeader{
+    <ul class="uk-breadcrumb">
+        <li>
+            <a asp-controller="Admin" asp-action="BurgerBaseAll">All</a>
+        </li>
+        <li>
+            <span href="">New burger base</span>
+        </li>
+    </ul>
+}
+
+<form asp-action="CreateBurgerBase">
+    <fieldset class="uk-fieldset">
+        <legend class="uk-legend">Add new burger base</legend>
+        <div asp-validation-summary="ModelOnly" class="uk-form-danger"></div>
+
+        <div class="uk-margin">
+            <input asp-for="BaseName" class="uk-input" placeholder="base name" />
+            <span asp-validation-for="BaseName" class="uk-form-danger"></span>
+        </div>
+
+        <div class="uk-margin">
+            <input asp-for="BaseNameCode" class="uk-input" placeholder="Four letter base code" />
+            <span asp-validation-for="BaseNameCode" class="uk-form-danger"></span>
+        </div>
+
+        <div class="uk-margin">
+            <input type="submit" value="Create" class="uk-button uk-button-primary" />
+        </div>
+
+    </fieldset>
+</form>
+
+<div>
+    <a asp-action="BurgerBaseAll" asp-controller="Admin">Back to List</a>
+</div>
+

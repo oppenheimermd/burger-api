@@ -9,6 +9,7 @@ using ImageMagick;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using BurgerApi.Models.Helpers;
 
 namespace BurgerApi.Services
 {
@@ -19,13 +20,14 @@ namespace BurgerApi.Services
         private readonly int _imageSmallSize;
         private readonly int _imageMediumSize;
         private readonly int _imageLargeSize;
+        private readonly SiteConfig _siteSettings;
 
         /// <summary>
         /// Base directory location for media
         /// </summary>
         //private readonly string _fileLocationPrefix;
 
-        public BurgerService(BurgerContext burgerContext, IHostingEnvironment env)
+        public BurgerService(BurgerContext burgerContext, IHostingEnvironment env, SiteConfig siteSettings)
         {
             _burgerContext = burgerContext;
             _folder = Path.Combine(env.WebRootPath, "burgerImages");
@@ -33,6 +35,7 @@ namespace BurgerApi.Services
             this._imageSmallSize = 60;
             this._imageMediumSize = 180;
             this._imageLargeSize = 1000;
+            _siteSettings = siteSettings;
         }
 
 
@@ -77,12 +80,25 @@ namespace BurgerApi.Services
         {
             var burgers = await _burgerContext.Burgers
                 .Include(b => b.BurgerBase).Include(b => b.Cuisine).Include(b => b.Image)
+                .OrderBy(x => x.TimeStamp)
                 .AsNoTracking()
                 .Skip(skip)
                 .Take(count).ToListAsync();
 
             return burgers;
         }
+
+        public PagedResult<Burger> GetBurgersPageable(int? page)
+        {
+            var pageableBurgers = _burgerContext.Burgers
+                .Include(b => b.BurgerBase).Include(b => b.Cuisine).Include(b => b.Image)
+                .OrderByDescending(x => x.TimeStamp)
+                .AsNoTracking()
+                .GetPaged(page ?? 1, int.Parse(_siteSettings.ItemsPerPage));
+
+            return pageableBurgers;
+        }
+
 
         public async Task<Burger> GetBurgerAsync(int? id)
         {
@@ -106,6 +122,17 @@ namespace BurgerApi.Services
         {
             var burgerbaseList = await _burgerContext.BurgerBases.AsNoTracking().ToListAsync();
             return burgerbaseList;
+        }
+
+        public async Task<bool> BurgerExistAsync(string instagramUrl)
+        {
+            if (instagramUrl == null) throw new ArgumentNullException(nameof(instagramUrl));
+            var burger = await _burgerContext.Burgers
+                .AsNoTracking()
+                .Include("Image")
+                .SingleOrDefaultAsync(x => x.InstagramSourceUrl == instagramUrl);
+
+            return burger != null;
         }
 
 

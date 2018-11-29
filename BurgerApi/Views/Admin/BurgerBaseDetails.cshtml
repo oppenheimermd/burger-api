@@ -1,11 +1,21 @@
 ﻿@model BurgerApi.Models.BurgerBase
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Burger Base Details";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Details</h2>
+@section DefaultHeader{
+    <ul class="uk-breadcrumb">
+        <li>
+            <a asp-controller="Admin" asp-action="BurgerBaseAll">All</a>
+        </li>
+        <li>
+            <span href="">Burger base details</span>
+        </li>
+    </ul>
+}
+
 
 <div>
     <h4>BurgerBase</h4>
@@ -26,6 +36,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Admin" asp-action="EditBurgerBase" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-controller="Admin" asp-action="BurgerBaseAll">Back to List</a>
 </div>

@@ -1,0 +1,46 @@
+﻿@model BurgerApi.Models.Cuisine
+
+@{
+    ViewData["Title"] = "Edit Cuisine";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section DefaultHeader{
+    <ul class="uk-breadcrumb">
+        <li>
+            <a asp-controller="Admin" asp-action="CuisinesAll">All</a>
+        </li>
+        <li>
+            <span href="">Edit cuisine</span>
+        </li>
+    </ul>
+}
+
+<form asp-action="EditCuisine">
+    <fieldset class="uk-fieldset">
+        <legend class="uk-legend">Edit cuisine</legend>
+        <div asp-validation-summary="ModelOnly" class="uk-form-danger"></div>
+
+        <div class="uk-margin">
+            <input asp-for="CuisineCode" class="uk-input" placeholder="Four letter cuisine code" />
+            <span asp-validation-for="CuisineCode" class="uk-form-danger"></span>
+        </div>
+
+        <div class="uk-margin">
+            <input asp-for="CuisineTitle" class="uk-input" placeholder="Cuisine title" />
+            <span asp-validation-for="CuisineTitle" class="uk-form-danger"></span>
+        </div>
+
+        <div class="uk-margin">
+            <input type="submit" value="Update" class="uk-button uk-button-primary" />
+        </div>
+
+    </fieldset>
+</form>
+
+<div>
+    <a asp-controller="Admin" asp-action="CuisinesAll">Back to List</a>
+</div>
+
+
+
